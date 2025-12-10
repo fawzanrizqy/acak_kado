@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gift Result 🎰</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="min-h-screen bg-gray-900 text-white">
+    <!-- Top bar -->
+    <div class="px-6 py-4 flex items-center justify-between">
+      <h1 class="text-3xl font-extrabold flex items-center gap-2">
+        🎰 Gift Shuffle Result
+      </h1>
+
+      <div class="space-x-3 text-sm">
+        <a href="/register" class="text-blue-300 hover:underline">Register</a>
+        <a href="/list" class="text-blue-300 hover:underline">List</a>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="px-6 flex gap-3 mb-4">
+      <button
+        id="btnShuffle"
+        class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl font-semibold active:scale-95 transition"
+      >
+        Shuffle 🎲
+      </button>
+
+      <button
+        id="btnReset"
+        class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-semibold active:scale-95 transition"
+      >
+        Reset ♻️
+      </button>
+    </div>
+
+    <!-- FULL WIDTH TABLE AREA -->
+    <div class="w-full bg-gray-800 rounded-none p-4 overflow-x-auto">
+      <% const perCol = 20; const total = participants.length; const cols =
+      Math.ceil(total / perCol); %>
+
+      <div class="flex gap-8 w-full">
+        <% if (total === 0) { %>
+        <div class="text-center text-gray-300 w-full">
+          No participants yet.
+        </div>
+        <% } else { %>
+
+        <% for (let c = 0; c < cols; c++) { %>
+        <% const start = c * perCol; const end = Math.min(start + perCol, total);
+        %>
+
+        <table class="text-left border-collapse text-base w-auto">
+          <thead>
+            <tr class="bg-gray-700">
+              <th class="px-4 py-2 rounded-l-2xl">#</th>
+              <th class="px-4 py-2">Name</th>
+              <th class="px-4 py-2 rounded-r-2xl">Gift (get)</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% for (let i = start; i < end; i++) { const p = participants[i]; %>
+            <tr
+              class="border-b border-gray-700 last:border-0 hover:bg-gray-700/40"
+              data-gift="<%= p.gift %>"
+            >
+              <td class="px-4 py-2"><%= i + 1 %></td>
+              <td class="px-4 py-2 font-semibold"><%= p.name %></td>
+              <td class="px-4 py-2">
+                <span
+                  class="inline-block min-w-[3rem] text-center text-2xl font-extrabold tracking-wider cell-get"
+                >
+                  <%= p.get === null ? "-" : p.get %>
+                </span>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+        <% } %>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script>
+      const participants = <%- JSON.stringify(participants) %>;
+      const maxGift =
+        participants.length > 0
+          ? participants.reduce((m, p) => Math.max(m, p.gift), 0)
+          : 0;
+
+      const btnShuffle = document.getElementById("btnShuffle");
+      const btnReset = document.getElementById("btnReset");
+
+      function animateNumber(el, target) {
+        if (target === null || target === undefined) {
+          el.textContent = "-";
+          return;
+        }
+
+        let cycles = 0;
+        const totalCycles = 15 + Math.floor(Math.random() * 15);
+        const interval = setInterval(() => {
+          const randomNum = 1 + Math.floor(Math.random() * maxGift);
+          el.textContent = randomNum;
+          cycles++;
+          if (cycles >= totalCycles) {
+            clearInterval(interval);
+            el.textContent = target;
+          }
+        }, 60);
+      }
+
+      btnShuffle?.addEventListener("click", async () => {
+        btnShuffle.disabled = true;
+        btnShuffle.textContent = "Shuffling...";
+
+        const res = await fetch("/shuffle", { method: "POST" });
+        const data = await res.json();
+        if (!data.ok) return;
+
+        data.participants.forEach((p) => {
+          const cell = document.querySelector(
+            `tr[data-gift="${p.gift}"] .cell-get`
+          );
+          if (cell) animateNumber(cell, p.get);
+        });
+
+        setTimeout(() => {
+          btnShuffle.disabled = false;
+          btnShuffle.textContent = "Shuffle 🎲";
+        }, 2000);
+      });
+
+      btnReset?.addEventListener("click", async () => {
+        const res = await fetch("/reset", { method: "POST" });
+        const data = await res.json();
+        if (!data.ok) return;
+
+        document
+          .querySelectorAll(".cell-get")
+          .forEach((el) => (el.textContent = "-"));
+      });
+    </script>
+  </body>
+</html>

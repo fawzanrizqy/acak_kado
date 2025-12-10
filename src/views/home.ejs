@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🎁 Office Gift Exchange</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Optional: custom Tailwind config for playful colors -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              candyPink: "#ff6fb5",
+              candyYellow: "#ffe66f",
+              candyPurple: "#c4a8ff",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="min-h-screen bg-gradient-to-br from-candyYellow via-white to-candyPurple flex items-center justify-center">
+    <div class="max-w-xl w-full bg-white/80 rounded-3xl shadow-2xl p-8 border border-candyPink/40">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <span class="text-4xl">🎁</span>
+        <h1 class="text-3xl font-extrabold text-candyPink tracking-tight">
+          Office Gift Shuffle
+        </h1>
+        <span class="text-4xl">🎉</span>
+      </div>
+
+      <p class="text-gray-700 text-center mb-6">
+        Enter your name, hit the magic button, and see which gift number destiny
+        gives you 😈
+      </p>
+
+      <form id="formGift" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">
+            Your Name
+          </label>
+          <input
+            id="inputName"
+            type="text"
+            required
+            class="w-full rounded-2xl border border-candyPink/40 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-candyPink focus:border-candyPink text-gray-800"
+            placeholder="e.g. Fawzan"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">
+            Max Gift Number
+          </label>
+          <input
+            id="inputMax"
+            type="number"
+            min="1"
+            value="150"
+            class="w-full rounded-2xl border border-candyPink/40 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-candyPink focus:border-candyPink text-gray-800"
+          />
+          <p class="text-xs text-gray-500 mt-1">
+            Set how many gifts there are (for now this is just a front-end demo).
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full mt-4 bg-candyPink hover:bg-pink-500 text-white font-bold py-3 rounded-2xl text-lg shadow-lg shadow-pink-200 active:scale-95 transition transform flex items-center justify-center gap-2"
+        >
+          <span>Draw My Gift</span> <span>✨</span>
+        </button>
+      </form>
+
+      <div
+        id="resultBox"
+        class="mt-6 hidden text-center bg-candyPurple/10 border border-candyPurple/40 rounded-2xl p-4"
+      >
+        <p class="text-sm text-gray-600 mb-1">
+          Result for:
+          <span id="resultName" class="font-semibold text-gray-800"></span>
+        </p>
+        <p class="text-5xl font-extrabold text-candyPink drop-shadow mt-2">
+          #<span id="resultNumber"></span>
+        </p>
+        <p class="mt-2 text-gray-700 text-sm">
+          Screenshot this and don’t tell anyone… or do 👀
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("formGift");
+      const inputName = document.getElementById("inputName");
+      const inputMax = document.getElementById("inputMax");
+      const resultBox = document.getElementById("resultBox");
+      const resultName = document.getElementById("resultName");
+      const resultNumber = document.getElementById("resultNumber");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = inputName.value.trim();
+        const max = parseInt(inputMax.value || "0", 10);
+
+        if (!name || !max || max < 1) return;
+
+        const randomNumber = Math.floor(Math.random() * max) + 1;
+
+        resultName.textContent = name;
+        resultNumber.textContent = randomNumber;
+        resultBox.classList.remove("hidden");
+      });
+    </script>
+  </body>
+</html>

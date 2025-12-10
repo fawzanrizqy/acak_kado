@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Registered Gifts 🎁</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-50 p-6">
+    <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-2xl font-bold text-pink-600">
+          🎁 Registered Gifts List
+        </h1>
+        <div class="space-x-2 text-sm">
+          <a href="/register" class="text-blue-500 hover:underline">Add New</a>
+          <a href="/result" class="text-blue-500 hover:underline">Result</a>
+        </div>
+      </div>
+
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-pink-100">
+            <th class="px-4 py-2 rounded-l-xl">#</th>
+            <th class="px-4 py-2">Name</th>
+            <th class="px-4 py-2 rounded-r-xl">Gift Number (deposit)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (participants.length === 0) { %>
+          <tr>
+            <td colspan="3" class="px-4 py-4 text-center text-gray-500">
+              No data yet. Go to <a href="/register" class="text-blue-500 hover:underline">Register</a>.
+            </td>
+          </tr>
+          <% } %>
+          <% participants.forEach((p, idx) => { %>
+          <tr class="border-b last:border-0 hover:bg-pink-50">
+            <td class="px-4 py-2"><%= idx + 1 %></td>
+            <td class="px-4 py-2 font-semibold"><%= p.name %></td>
+            <td class="px-4 py-2"><%= p.gift %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
