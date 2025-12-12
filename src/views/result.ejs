@@ -2,48 +2,105 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Gift Result 🎰</title>
+    <title>Tukar Kado 🎁</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom color tuning based on iDClear -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              idGrayLight: "#f2f2f2",   // background
+              idGray: "#b3b3b3",        // table header
+              idGrayDark: "#4d4d4d",    // text iDClear
+              idMaroon: "#8b0000"       // gift number
+            }
+          }
+        }
+      }
+    </script>
   </head>
 
-  <body class="min-h-screen bg-gray-900 text-white">
-    <!-- Top bar -->
-    <div class="px-6 py-4 flex items-center justify-between">
-      <h1 class="text-3xl font-extrabold flex items-center gap-2">
-        🎰 Gift Shuffle Result
-      </h1>
+  <body class="min-h-screen bg-idGrayLight text-idGrayDark">
+   <div class="px-6 py-4 flex items-center justify-between">
+  <!-- Title -->
+  <h1 class="text-2xl font-extrabold tracking-tight text-idGrayDark">
+    🎁 Tukar Kado Forum Direksi – Karyawan Akhir Tahun 2025
+  </h1>
 
-      <div class="space-x-3 text-sm">
-        <a href="/register" class="text-blue-300 hover:underline">Register</a>
-        <a href="/list" class="text-blue-300 hover:underline">List</a>
-      </div>
-    </div>
+  <!-- Right side: logo + links -->
+  <div class="flex items-center gap-6">
+ 
 
-    <!-- Buttons -->
-    <div class="px-6 flex gap-3 mb-4">
-      <button
-        id="btnShuffle"
-        class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl font-semibold active:scale-95 transition"
-      >
-        Shuffle 🎲
-      </button>
+    <!-- iDClear Logo -->
+    <img
+      src="/img/logo.png"
+      alt="iDClear"
+      class="h-10 object-contain"
+    />
+  </div>
+</div>
 
-      <button
-        id="btnReset"
-        class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-semibold active:scale-95 transition"
-      >
-        Reset ♻️
-      </button>
-    </div>
+   <!-- Buttons -->
+<div class="px-6 flex gap-3 mb-4">
+  <!-- Shuffle -->
+  <button
+    id="btnShuffle"
+    class="flex items-center gap-2 bg-idGrayDark hover:bg-gray-700 text-white px-4 py-2 rounded-xl font-semibold active:scale-95 transition"
+  >
+    <!-- Heroicon: Arrows Right Left -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      class="w-5 h-5"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"
+      />
+    </svg>
+
+    <span>Shuffle</span>
+  </button>
+
+  <!-- Reset -->
+  <button
+    id="btnReset"
+    class="flex items-center gap-2 bg-idMaroon hover:bg-red-900 text-white px-4 py-2 rounded-xl font-semibold active:scale-95 transition"
+  >
+    <!-- Heroicon: Arrow Path -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      class="w-5 h-5"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M16.023 9.348h4.992m0 0v4.992m0-4.992l-4.992 4.992M7.977 14.652H2.985m0 0v-4.992m0 4.992l4.992-4.992"
+      />
+    </svg>
+
+    <span>Reset</span>
+  </button>
+</div>
 
     <!-- FULL WIDTH TABLE AREA -->
-    <div class="w-full bg-gray-800 rounded-none p-4 overflow-x-auto">
+    <div class="w-full p-4 overflow-x-auto">
       <% const perCol = 20; const total = participants.length; const cols =
       Math.ceil(total / perCol); %>
 
       <div class="flex gap-8 w-full">
         <% if (total === 0) { %>
-        <div class="text-center text-gray-300 w-full">
+        <div class="text-center w-full text-idGrayDark">
           No participants yet.
         </div>
         <% } else { %>
@@ -52,26 +109,32 @@
         <% const start = c * perCol; const end = Math.min(start + perCol, total);
         %>
 
-        <table class="text-left border-collapse text-base w-auto">
+        <table class="border-collapse text-base bg-white rounded-xl shadow">
           <thead>
-            <tr class="bg-gray-700">
-              <th class="px-4 py-2 rounded-l-2xl">#</th>
-              <th class="px-4 py-2">Name</th>
-              <th class="px-4 py-2 rounded-r-2xl">Gift (get)</th>
+            <tr class="bg-idGray">
+              <th class="px-4 py-2 rounded-l-xl text-idGrayDark">#</th>
+              <th class="px-4 py-2 text-idGrayDark">Name</th>
+              <th class="px-4 py-2 rounded-r-xl text-idGrayDark">Gift</th>
             </tr>
           </thead>
 
           <tbody>
             <% for (let i = start; i < end; i++) { const p = participants[i]; %>
             <tr
-              class="border-b border-gray-700 last:border-0 hover:bg-gray-700/40"
+              class="border-b last:border-0 hover:bg-gray-100"
               data-gift="<%= p.gift %>"
             >
-              <td class="px-4 py-2"><%= i + 1 %></td>
-              <td class="px-4 py-2 font-semibold"><%= p.name %></td>
-              <td class="px-4 py-2">
+              <td class="px-4 py-2 font-semibold text-idGrayDark">
+                <%= i + 1 %>
+              </td>
+
+              <td class="px-4 py-2 font-semibold text-idGrayDark">
+                <%= p.name %>
+              </td>
+
+              <td class="px-4 py-2 text-center">
                 <span
-                  class="inline-block min-w-[3rem] text-center text-2xl font-extrabold tracking-wider cell-get"
+                  class="inline-block min-w-[3rem] text-2xl font-extrabold tracking-wider text-idMaroon cell-get"
                 >
                   <%= p.get === null ? "-" : p.get %>
                 </span>
@@ -85,8 +148,9 @@
       </div>
     </div>
 
-    <!-- JS -->
+    <!-- JS (UNCHANGED) -->
     <script>
+      
       const participants = <%- JSON.stringify(participants) %>;
       const maxGift =
         participants.length > 0
@@ -95,6 +159,8 @@
 
       const btnShuffle = document.getElementById("btnShuffle");
       const btnReset = document.getElementById("btnReset");
+      const shuffleBtnHTML = btnShuffle.innerHTML;
+
 
       function animateNumber(el, target) {
         if (target === null || target === undefined) {
@@ -132,7 +198,7 @@
 
         setTimeout(() => {
           btnShuffle.disabled = false;
-          btnShuffle.textContent = "Shuffle 🎲";
+        btnShuffle.innerHTML = shuffleBtnHTML;
         }, 2000);
       });
 
@@ -146,5 +212,9 @@
           .forEach((el) => (el.textContent = "-"));
       });
     </script>
+       <div class="space-x-3 text-sm mt-5 px-6 pb-6">
+      <a href="/register" class="hover:underline">Register</a>
+      <a href="/list" class="hover:underline">List</a>
+    </div>
   </body>
 </html>
